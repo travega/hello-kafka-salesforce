@@ -17,7 +17,7 @@ object SalesforceToKafka extends App {
 
       def messageToProducerRecord(message: Message) = {
         logger.debug("Got message: " + message.getJSON)
-        new ProducerRecord[String, String](Kafka.prefix + "ContactUpdates", message.getJSON)
+        new ProducerRecord[String, String](Kafka.prefix + sys.env.get("TOPIC"), message.getJSON)
       }
 
       salesforceSource.map(messageToProducerRecord).to(kafkaSink).run()
