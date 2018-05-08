@@ -64,7 +64,7 @@ object Salesforce {
         }
       }
 
-      val url = instanceUrl + "cometd/42.0"
+      val url = instanceUrl + "cometd/36.0"
       val bayeuxClient = new BayeuxClient(url, transport)
 
       val tryResult = Try {
