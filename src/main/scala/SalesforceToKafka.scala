@@ -11,7 +11,7 @@ object SalesforceToKafka extends App {
 
   implicit val actorSystem = ActorSystem()
 
-  Salesforce.withSource("Chatter_Event__e") { salesforceSource =>
+  Salesforce.withSource("chatters") { salesforceSource =>
     Kafka.sink[String]().map { kafkaSink =>
       implicit val materializer = ActorMaterializer()(actorSystem)
 
