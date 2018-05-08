@@ -49,7 +49,7 @@ object Salesforce {
   }
 
 
-  def withSource[T](topic: String)(f: Source[Message, NotUsed] => T)(implicit actorSystem: ActorSystem): Try[T] = {
+  def withSource[T](event: String)(f: Source[Message, NotUsed] => T)(implicit actorSystem: ActorSystem): Try[T] = {
     connectionInfo().flatMap { case (sessionId, instanceUrl) =>
 
       val httpClient = new HttpClient(new SslContextFactory())
@@ -64,7 +64,7 @@ object Salesforce {
         }
       }
 
-      val url = instanceUrl + "cometd/36.0"
+      val url = instanceUrl + "cometd/42.0"
       val bayeuxClient = new BayeuxClient(url, transport)
 
       val tryResult = Try {
@@ -79,7 +79,7 @@ object Salesforce {
           throw new Error("Failed to handshake: " + bayeuxClient.getURL)
         }
         else {
-          bayeuxClient.getChannel(s"/topic/$topic").subscribe {
+          bayeuxClient.getChannel(s"/event/$event").subscribe {
             new MessageListener() {
               override def onMessage(channel: ClientSessionChannel, message: Message) {
                 actorRef ! message
