@@ -1,5 +1,5 @@
 {
-  "name": "hello-kafka-salesforce",
+  "name": "sf-topics-to-kafka",
   "keywords": [
     "salesforce",
     "kafka"
