@@ -40,13 +40,13 @@ This simple app uses the Salesforce Streaming API to listen for events in Salesf
 
         heroku kafka:wait -a <YOUR_APP>
 
-8. Add a new Kafka topic:
+8. If not create as part of the Dotnet consumer app, add a new Kafka topic:
 
-        heroku kafka:topics:create ContactUpdates --partitions 32 -a <YOUR_APP>
+        heroku kafka:topics:create chatter --partitions 32 -a <YOUR_APP>
 
 9. Watch the Kafka log
 
-        heroku kafka:topics:tail ContactUpdates -a <YOUR_APP>
+        heroku kafka:topics:tail chatter -a <YOUR_APP>
 
 10. Make a change to a Contact in Salesforce and you should see the event in the Kafka log.
 
