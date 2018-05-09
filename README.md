@@ -1,15 +1,15 @@
-Hello Kafka Salesforce
-----------------------
+Salesforce PushTopics to Kafka
+------------------------------
 
 This simple app uses the Salesforce Streaming API to listen for events in Salesforce and then sends them to Kafka.
 
 ## Cloud Setup
 
 1. [Signup for a Salesforce Developer Org](https://developer.salesforce.com/signup)
-1. In Salesforce, create a PushTopic using the Execute Anonymous Apex feature in the Developer Console:
+2. In Salesforce, create a PushTopic using the Execute Anonymous Apex feature in the Developer Console:
 
         PushTopic pushTopic = new PushTopic();
-        pushTopic.Name = 'ContactUpdates';
+        pushTopic.Name = 'chatter';
         pushTopic.Query = 'SELECT Id, Name FROM Contact';
         pushTopic.ApiVersion = 36.0;
         pushTopic.NotifyForOperationCreate = true;
@@ -19,28 +19,36 @@ This simple app uses the Salesforce Streaming API to listen for events in Salesf
         pushTopic.NotifyForFields = 'Referenced';
         insert pushTopic;
 
-1. [![Deploy on Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-1. Add the Heroku Kafka Addon to the app
+3. [![Deploy on Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+4. Add TOPIC environment variable
 
-        heroku addons:add heroku-kafka -a YOUR_APP
+        heroku config:set TOPIC=chatter -a <YOUR_APP>
 
-1. Install the Kafka plugin into the Heroku CLI
+5. Add the Heroku Kafka Addon to the app
+
+        heroku addons:add heroku-kafka -a <YOUR_APP>
+   
+   If you are using this app as part of the Dotnet kafka consumer app then attach the Kafka instance created there
+
+        heroku addons:attach <OTHER_APP_NAME>::KAFKA -a <THIS_APP_NAME> 
+
+6. Install the Kafka plugin into the Heroku CLI
 
         heroku plugins:install heroku-kafka
 
-1. Wait for Kafka to be provisioned:
+7. Wait for Kafka to be provisioned:
 
-        heroku kafka:wait -a YOUR_APP
+        heroku kafka:wait -a <YOUR_APP>
 
-1. Add a new Kafka topic:
+8. Add a new Kafka topic:
 
-        heroku kafka:topics:create ContactUpdates --partitions 32 -a YOUR_APP
+        heroku kafka:topics:create ContactUpdates --partitions 32 -a <YOUR_APP>
 
-1. Watch the Kafka log
+9. Watch the Kafka log
 
-        heroku kafka:topics:tail ContactUpdates -a YOUR_APP
+        heroku kafka:topics:tail ContactUpdates -a <YOUR_APP>
 
-1. Make a change to a Contact in Salesforce and you should see the event in the Kafka log.
+10. Make a change to a Contact in Salesforce and you should see the event in the Kafka log.
 
 
 ## Local Setup
@@ -49,7 +57,7 @@ This simple app uses the Salesforce Streaming API to listen for events in Salesf
 
 1. Clone the source:
 
-        git clone https://github.com/jamesward/hello-kafka-salesforce
+        git clone https://github.com/travega/hello-kafka-salesforce
 
 1. Setup a `.env` file with the necessary info:
 
